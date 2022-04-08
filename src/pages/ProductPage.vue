@@ -41,7 +41,7 @@
         </div>
         <ul class="pics__list">
           <!-- Доработать логику изменения картинок -->
-          <li class="pics__item" v-for="(colors, index) in productData.colors" :key="index" @click="chooseProductColor">
+          <li class="pics__item" v-for="(colors, index) in productData.colors" :key="index" @click.prevent="chooseProductColor">
             <a href="#" class="pics__link ">
               <img
                 width="98"
@@ -228,7 +228,7 @@ export default {
     },
 
     chooseProductColor(){
-      value = this.index
+      value = product.colors[index]
     }
   },
   watch: {

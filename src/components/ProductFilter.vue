@@ -43,6 +43,7 @@
                     type="checkbox"
                     name="material"
                     :value="material.id"
+                     v-model.number="currentMaterialId"
                     
                   />
                   <span class="check-list__desc">
@@ -57,13 +58,14 @@
           <fieldset class="form__block">
             <legend class="form__legend">Коллекция</legend>
             <ul class="check-list">
-              <li class="check-list__item" v-for="collection in collections" :key="collection.id">
+              <li class="check-list__item"  v-for="collection in collections" :key="collection.id">
                 <label class="check-list__label">
                   <input
                     class="check-list__check sr-only"
                     type="checkbox"
                     name="collection"
                     :value="collection.id"
+                    v-model.number="currentCollectionId"
                     
                     
                   />
@@ -95,8 +97,8 @@ export default {
             currentPriceFrom:0,
             currentPriceTo:0,
             currentCategoryId:0, 
-            currentMaterialId:0,
-            currentCollectionId:0,
+            currentMaterialId: [],
+            currentCollectionId: [],
             
             categoriesData: null,
             materailData: null,

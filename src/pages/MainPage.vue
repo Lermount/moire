@@ -50,8 +50,8 @@ export default {
       filterPriceFrom: 0,
       filterPriceTo: 0,
       filterCategoryId: 0,
-      //filterMaterialId:0, додумать фильтрацию
-      //filterCollectionId:0, додумать фильтрацию
+      filterMaterialId: [], 
+      filterCollectionId: [], 
 
       page: 1,
       productsPerPage: 3,
@@ -83,7 +83,8 @@ export default {
               page: this.page,
               limit: this.productsPerPage,
               categoryId: this.filterCategoryId,
-              //вставить сезон и материал
+              materialIds: this.filterMaterialId,
+              seasonIds: this.filterCollectionId,
               minPrice: this.filterPriceFrom,
               maxPrice: this.filterPriceTo,
             },
@@ -93,9 +94,11 @@ export default {
           .then(() => this.productsLoading = false);
       }, 0);
     },
+
   },
   created() {
     this.loadProducts();
+    this.loadMaterials();
   },
 
   watch: {
@@ -116,6 +119,12 @@ export default {
     filterCategoryId() {
       this.loadProducts();
     },
+    filterMaterialId(){
+      this.loadProducts();
+    },
+    filterCollectionId(){
+      this.loadProducts();
+    }
   },
 
   components: { ProductList, BasePagination, ProductFilter },
