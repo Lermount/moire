@@ -154,8 +154,8 @@ export default {
             this.$emit('update:priceFrom',0);
             this.$emit('update:priceTo',0);
             this.$emit('update:categoryId',0);
-            this.$emit('update:materialId',0);
-            this.$emit('update:collectionId',0);
+            this.$emit('update:materialId',[]);
+            this.$emit('update:collectionId',[]);
         },
 
         loadCategories(){

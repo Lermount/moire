@@ -2,14 +2,14 @@
   <li class="cart__item product">
     <div class="product__pic">
       <img
-        :src="item.product.image"
+        :src="products[0].product.colors[0].gallery[0].file.url"
         width="120"
         height="120"
         :alt="item.product.title"
       />
     </div>
     <h3 class="product__title">
-      {{ item.product.title }}
+      {{  }}
     </h3>
     <p class="product__info product__info--color">
       Цвет:
@@ -17,11 +17,11 @@
         <i style="background-color: #ff9b78"></i>
         Персиковый
       </span>
-      <span> Размер {{ $state.cartProductsData.size.title }}</span>
+      <span> Размер {{  }}</span>
     </p>
     
 
-    <span class="product__code"> Артикул: {{ item.product.id }} </span>
+    <span class="product__code"> Артикул: {{  }} </span>
 
     <div class="product__counter form__counter">
       <button

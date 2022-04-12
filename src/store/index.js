@@ -78,11 +78,13 @@ export default new Vuex.Store({
                 });
 
         },
-        addProductToCart(context, {productId, amount,}){
+        addProductToCart(context, {productId, amount, colorId, sizeId}){
             axios
                 .post(API_BASE_URL + 'api/baskets/products', {
                     productId: productId,
                     quantity: amount, 
+                    colorId: colorId,
+                    sizeId: sizeId
                 }, {
                     params: {
                         userAccessKey: context.state.userAccessKey,

@@ -36,12 +36,12 @@
           <img
             width="570"
             height="570"
-            :src="product.colors[value].gallery[0].file.url" :alt="product.title"
+            :src="productMainImage" :alt="product.title"
           />
         </div>
         <ul class="pics__list">
           <!-- Доработать логику изменения картинок -->
-          <li class="pics__item" v-for="(colors, index) in productData.colors" :key="index" @click.prevent="chooseProductColor">
+          <li class="pics__item" v-for="(colors, index) in productData.colors" :key="index" @click.prevent="chooseProductImage(colors)">
             <a href="#" class="pics__link ">
               <img
                 width="98"
@@ -102,14 +102,13 @@
               <fieldset class="form__block">
                 <legend class="form__legend">Цвет</legend>
                 <ul class="colors colors--black">
-                  <li class="colors__item" v-for="(color, index) in productData.colors" :key="index">
+                  <li class="colors__item" v-for="(color, index) in productData.colors" :key="color.id" @click.prevent="chooseProductImage(color)">
                     <label class="colors__label">
                       <input
                         class="colors__radio sr-only"
                         type="radio"
                         name="color-item"
-                        :value="index" v-model="value"
-            
+                        
                       />
                       <span
                         class="colors__value"
@@ -182,11 +181,12 @@ export default {
   data() {
     return {
       productAmount: 1,
-      value: 0,
-      size: 0,
+      size: {},
+      colorId: 0,
       productData: null,
       productLoading: false,
       productLoadingFailed: false,
+      productMainImage: null,
     };
   },
   filters: {
@@ -204,8 +204,10 @@ export default {
   methods: {
     ...mapActions(['addProductToCart']),
 
+   
+
     addToCart() {
-      this.addProductToCart({productId: this.product.id, amount: this.productAmount, colorId: this.value, sizeId: this.size.id})
+      this.addProductToCart({productId: this.product.id, amount: this.productAmount, colorId: this.colorId, sizeId: this.size.id})
 
     },
 
@@ -227,9 +229,11 @@ export default {
         .then(() => (this.productLoading = false));
     },
 
-    chooseProductColor(){
-      value = product.colors[index]
+    chooseProductImage(item){
+      this.productMainImage = item.gallery[0].file.url;
+      this.colorId = item.color.id
     }
+  
   },
   watch: {
     '$route.params.id':{
