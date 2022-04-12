@@ -2,7 +2,7 @@
   <li class="cart__item product">
     <div class="product__pic">
       <img
-        :src="item.product.colors[0].gallery[0].file.url"
+        :src="item.color.gallery[0].file.url"
         width="120"
         height="120"
         :alt="item.product.title"
@@ -14,14 +14,14 @@
     <p class="product__info product__info--color">
       Цвет:
       <span>
-        <i  :style="{'background-color': item.product.colors[0].color.code }"></i>
-        {{ item.product.colors[0].color.title }}
+        <i  :style="{'background-color': item.color.color.code }"></i>
+        {{ item.color.color.title }}
       </span>
-      <span> Размер {{ item.sizeId }}</span>
+      <span> Размер {{ item.size.title}}</span>
     </p>
     
 
-    <span class="product__code"> Артикул: {{ item.productId }} </span>
+    <span class="product__code"> Артикул: {{ item.id }} </span>
 
     <div class="product__counter form__counter">
       <button
@@ -37,11 +37,11 @@
       <input
         type="text"
         pattern="^[1-9]\d*$"
-        v-model.number="amount"
+        v-model.number="quantity"
         name="count"
       />
 
-      <button type="button" aria-label="Добавить один товар" @click="amount++">
+      <button type="button" aria-label="Добавить один товар" @click="quantity++">
         <svg width="10" height="10" fill="currentColor">
           <use xlink:href="#icon-plus"></use>
         </svg>
@@ -49,11 +49,11 @@
     </div>
 
     <b class="product__price">
-      {{ (item.amount * item.product.price) | numberFormat }} ₽
+      {{ (item.quantity * item.product.price) | numberFormat }} ₽
     </b>
 
     <button
-        @click.prevent="deleteProduct(item.productId)"
+        @click.prevent="deleteProduct(item.id)"
       class="product__del button-del"
       type="button"
       aria-label="Удалить товар из корзины"
@@ -66,20 +66,21 @@
 </template>
 <script>
 import numberFormat from "@/helpers/numberFormat";
-import { mapMutations } from "vuex";
+import { mapActions } from "vuex";
+
 
 export default {
   props: ["item"],
   filters: { numberFormat },
   computed: {
-    amount: {
+    quantity: {
       get() {
-        return this.item.amount;
+        return this.item.quantity;
       },
       set(value) {
-        this.$store.commit("updateCartProductAmount", {
-          productId: this.item.productId,
-          amount: value,
+        this.$store.dispatch("updateCartProductAmount", {
+          basketItemId: this.item.id,
+          quantity: value,
         });
       },
     },
@@ -87,13 +88,24 @@ export default {
 
   methods: {
     cartProductLess() {
-      if (this.amount <= 1) {
+      if (this.quantity <= 1) {
         return;
       }
-      return this.amount--;
+      return this.quantity--;
     },
 
-    ...mapMutations({deleteProduct: 'deleteCartProduct'}),
+    deleteProduct(){
+      this.deleteProductFromCart(this.item.id)
+    },
+
+    ...mapActions(['deleteProductFromCart'])
+  },
+
+  watch: {
+    quantity(value){
+      $store.getters.cartDetailProducts.item.amount = value;
+    }
   }
+
 };
 </script>

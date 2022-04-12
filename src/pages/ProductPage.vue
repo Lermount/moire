@@ -133,9 +133,11 @@
               </fieldset>
             </div>
 
-            <button class="item__button button button--primery" type="submit">
+            <button class="item__button button button--primery" type="submit" :disabled="productAddSendind">
               В корзину
             </button>
+            <div v-show="productAdded">Товар добавлен в корзину</div>
+            <div v-show="productAddSendind">Добавляем товар в корзину</div>
           </form>
         </div>
       </div>
@@ -187,6 +189,9 @@ export default {
       productLoading: false,
       productLoadingFailed: false,
       productMainImage: null,
+
+      productAdded:false,
+      productAddSendind: false,
     };
   },
   filters: {
@@ -207,7 +212,14 @@ export default {
    
 
     addToCart() {
+      this.productAdded = false;
+      this.productAddSendind = true;
+
       this.addProductToCart({productId: this.product.id, amount: this.productAmount, colorId: this.colorId, sizeId: this.size.id})
+          .then(() => {
+            this.productAdded = true;
+            this.productAddSendind = false;
+          });
 
     },
 
