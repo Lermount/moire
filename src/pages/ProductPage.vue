@@ -126,8 +126,7 @@
                   class="form__label form__label--small form__label--select"
                 >
                   <select class="form__select" type="text" name="category" v-model.number="size">
-                    <option :value="size" v-for="size in productData.sizes" :key="size.id">{{ size.title }}</option>
-                    
+                    <option :value="size" v-for="size in product.sizes" :key="size.id">{{ size.title }}</option> 
                   </select>
                 </label>
               </fieldset>
@@ -220,6 +219,7 @@ export default {
             this.productAdded = true;
             this.productAddSendind = false;
           });
+          
 
     },
 
@@ -236,7 +236,10 @@ export default {
 
       axios
         .get(API_BASE_URL + "api/products/" + this.$route.params.id)
-        .then((response) => (this.productData = response.data))
+        .then((response) => {
+          this.productData = response.data
+          this.chooseProductImage(this.productData.colors[0])
+        })
         .catch(() => (this.productLoadingFailed = true))
         .then(() => (this.productLoading = false));
     },
