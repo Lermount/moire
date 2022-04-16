@@ -98,7 +98,6 @@ export default {
   },
   created() {
     this.loadProducts();
-    this.loadMaterials();
   },
 
   watch: {

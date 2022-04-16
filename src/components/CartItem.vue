@@ -103,7 +103,7 @@ export default {
 
   watch: {
     quantity(value){
-      $store.getters.cartDetailProducts.item.amount = value;
+     value;
     }
   }
 

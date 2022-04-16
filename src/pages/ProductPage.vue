@@ -40,7 +40,6 @@
           />
         </div>
         <ul class="pics__list">
-          <!-- Доработать логику изменения картинок -->
           <li class="pics__item" v-for="(colors, index) in productData.colors" :key="index" @click.prevent="chooseProductImage(colors)">
             <a href="#" class="pics__link ">
               <img
@@ -122,9 +121,7 @@
 
               <fieldset class="form__block">
                 <legend class="form__legend">Размер</legend>
-                <label
-                  class="form__label form__label--small form__label--select"
-                >
+                <label class="form__label form__label--small form__label--select">
                   <select class="form__select" type="text" name="category" v-model.number="size">
                     <option :value="size" v-for="size in product.sizes" :key="size.id">{{ size.title }}</option> 
                   </select>
@@ -132,11 +129,14 @@
               </fieldset>
             </div>
 
-            <button class="item__button button button--primery" type="submit" :disabled="productAddSendind">
+            <button class="item__button button button--primery" type="submit">
               В корзину
             </button>
             <div v-show="productAdded">Товар добавлен в корзину</div>
-            <div v-show="productAddSendind">Добавляем товар в корзину</div>
+            <div v-show="productAddSendind" v-if="!formErrorMessage">Добавляем товар в корзину</div>
+            <p  v-if="formErrorMessage">
+            {{ formErrorMessage }}
+          </p>
           </form>
         </div>
       </div>
@@ -191,6 +191,8 @@ export default {
 
       productAdded:false,
       productAddSendind: false,
+      formError: {},
+      formErrorMessage: '',
     };
   },
   filters: {
@@ -213,12 +215,18 @@ export default {
     addToCart() {
       this.productAdded = false;
       this.productAddSendind = true;
+      this.formError = {},
+      this.formErrorMessage = '',
 
       this.addProductToCart({productId: this.product.id, amount: this.productAmount, colorId: this.colorId, sizeId: this.size.id})
           .then(() => {
             this.productAdded = true;
             this.productAddSendind = false;
-          });
+          })
+          .catch(error => {
+             this.formError = error.response.data.error.request || {};
+             this.formErrorMessage = error.response.data.error.request.sizeId;
+          })
           
 
     },
