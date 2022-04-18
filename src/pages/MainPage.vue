@@ -54,7 +54,7 @@ export default {
       filterCollectionId: [], 
 
       page: 1,
-      productsPerPage: 3,
+      productsPerPage: 6,
 
       productsData: null,
 

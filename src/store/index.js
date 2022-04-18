@@ -18,14 +18,11 @@ export default new Vuex.Store({
         updateOrderInfo(state, orderInfo){
             state.orderInfo = orderInfo;
         },
-        resetCart(){
-            state.cartProducts = [];
-        },
-        updateCartProductAmount(state,{productId,amount}){
-            const item = state.cartProducts.find(item => item.productId === productId);
+        updateCartProductAmount(state,{basketItemId, quantity}){
+            const item = state.cartProducts.find(item => item.id === basketItemId);
 
             if(item) {
-                item.amount = amount;
+                item.quantity = quantity;
             }
         },
         updateUserAccessKey(state,accessKey){
@@ -43,10 +40,16 @@ export default new Vuex.Store({
                     sizeId: item.size.id,
                 }
             });
+        },
+        resetCart(){
+            this.state.cartProducts = [];
+        },
+        deleteCartProduct(state, id){
+            state.cartProductsData = state.cartProductsData.filter(item => item.id !== id)
         }
     },
     getters: {
-        cartDetailProducts(state,getters){
+        cartDetailProducts(state,){
             return state.cartProducts.map(item => {
                 const product = state.cartProductsData.find(p => p.product.id === item.productId).product;
                 return {

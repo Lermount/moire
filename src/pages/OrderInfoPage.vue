@@ -70,7 +70,7 @@
                 Способ оплаты
               </span>
               <span class="dictionary__value">
-                картой при получении
+               {{ this.$store.state.orderInfo.paymentType }}
               </span>
             </li>
           </ul>
@@ -88,7 +88,7 @@ import CartOrderBlock from "@/components/CartOrderBlock.vue";
 export default {
 
     components: { CartOrderBlock },
-    props:["cartItem"],
+    props:["cartItem","payment"],
     created(){
         if(this.$store.state.orderInfo && this.$store.state.orderInfo.id === this.$route.params.id) {
             return;

@@ -95,6 +95,7 @@ export default {
     },
 
     deleteProduct(){
+      this.$store.commit('deleteCartProduct', this.item.id)
       this.deleteProductFromCart(this.item.id)
     },
 

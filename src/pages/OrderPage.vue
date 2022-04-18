@@ -40,19 +40,11 @@
           <div class="cart__options">
             <h3 class="cart__title">Доставка</h3>
             <ul class="cart__options options">
-              <li class="options__item">
+              <li class="options__item" v-for="delivery in deliveryTypeId" :key="delivery.id" >
                 <label class="options__label">
-                  <input class="options__radio sr-only" type="radio" name="delivery" :value="1" v-model="deliveryTypeId">
+                  <input class="options__radio sr-only" type="radio" name="delivery" :value="delivery.id" v-model="deliveryId">
                   <span class="options__value">
-                    Самовывоз <b>бесплатно</b>
-                  </span>
-                </label>
-              </li>
-              <li class="options__item">
-                <label class="options__label">
-                  <input class="options__radio sr-only" type="radio" name="delivery" :value="2" v-model="deliveryTypeId">
-                  <span class="options__value">
-                    Курьером <b>290 ₽</b>
+                    {{ delivery.title }} <b>{{ delivery.price }}</b>
                   </span>
                 </label>
               </li>
@@ -60,19 +52,11 @@
 
             <h3 class="cart__title">Оплата</h3>
             <ul class="cart__options options">
-              <li class="options__item">
+              <li class="options__item" v-for="payment in paymentTypeId" :key="payment.id">
                 <label class="options__label">
-                  <input class="options__radio sr-only" type="radio" name="pay" :value="1" v-model="paymentTypeId">
+                  <input class="options__radio sr-only" type="radio" name="pay" :value="payment.id" v-model="paymentId">
                   <span class="options__value">
-                    Картой при получении
-                  </span>
-                </label>
-              </li>
-              <li class="options__item">
-                <label class="options__label">
-                  <input class="options__radio sr-only" type="radio" name="pay" :value="2" v-model="paymentTypeId">
-                  <span class="options__value">
-                    Наличными при получении
+                    {{ payment.title }}
                   </span>
                 </label>
               </li>
@@ -108,6 +92,9 @@ export default {
             formErrorMessage: '',
             deliveryTypeId:null,
             paymentTypeId:null,
+
+            deliveryId:null,
+            paymentId:null,
         }
     },
 
@@ -119,8 +106,8 @@ export default {
             axios
                 .post(API_BASE_URL + 'api/orders',{
                     ...this.formData,
-                    deliveryTypeId:this.deliveryTypeId,
-                    paymentTypeId:this.paymentTypeId,
+                    deliveryTypeId:this.deliveryId,
+                    paymentTypeId:this.paymentId,
                     
                 },{
                     params: {
@@ -138,7 +125,29 @@ export default {
                     this.formErrorMessage = error.response.data.error.request.deliveryTypeId;
                     this.formErrorMessage = error.response.data.error.request.paymentTypeId;
                 })
-        }       
+        },
+        delivery(){
+          axios
+            .get(API_BASE_URL + "api/deliveries")
+            .then(response => {
+              this.deliveryTypeId = response.data;
+            })
+          
+        },
+          payments(){
+          axios
+            .get(API_BASE_URL + "api/payments", {
+              params:{
+                deliveryTypeId: 1
+              }
+            })
+            .then(response => this.paymentTypeId = response.data)
+          
+        }     
+    },
+    created(){
+      this.delivery();
+      this.payments();
     }
 }
 </script>
